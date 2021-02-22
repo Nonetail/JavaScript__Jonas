@@ -8,6 +8,7 @@ function calcAge(birthYear) {
   const age = 2037 - birthYear;
 
   function printAge() {
+    // NOTE: birthYear function argument is also in the scope chain
     let output = `${firstName}, you are ${age}, born in ${birthYear}`;
     console.log(output);
 
@@ -16,12 +17,13 @@ function calcAge(birthYear) {
       // Creating NEW variable with same name as outer scope's variable
       const firstName = 'Steven';
 
-      // Reasssigning outer scope's variable
+      //NOTE: Reasssigning outer scope's variable, it's not a copy!
       output = 'NEW OUTPUT!';
 
       const str = `Oh, and you're a millenial, ${firstName}`;
       console.log(str);
 
+      //NOTE: function in block scope only works in strict mode
       function add(a, b) {
         return a + b;
       }
@@ -80,6 +82,7 @@ function deleteShoppingCart() {
   console.log('All products deleted!');
 }
 
+// NOTE: variable declared with var is stored in the windows object
 var x = 1;
 let y = 2;
 const z = 3;
@@ -91,18 +94,21 @@ console.log(z === window.z);
 
 ///////////////////////////////////////
 // The this Keyword in Practice
+// NOTE: this in global scope points to the windows object (even in the strict mode)
 console.log(this);
 
 const calcAge = function (birthYear) {
   console.log(2037 - birthYear);
   console.log(this);
 };
+// NOTE: this in a simple function call points to the windows object (not in strict mode) / undefined (strict mode)
 calcAge(1991);
 
 const calcAgeArrow = birthYear => {
   console.log(2037 - birthYear);
   console.log(this);
 };
+// NOTE: this in a arrow function call uses its lexical parent scope this keyword
 calcAgeArrow(1980);
 
 const jonas = {
@@ -135,7 +141,8 @@ const jonas = {
   calcAge: function () {
     // console.log(this);
     console.log(2037 - this.year);
-
+    
+    // NOTE: Good old way
     // Solution 1
     // const self = this; // self or that
     // const isMillenial = function () {
@@ -143,6 +150,7 @@ const jonas = {
     //   console.log(self.year >= 1981 && self.year <= 1996);
     // };
 
+    // NOTE:
     // Solution 2
     const isMillenial = () => {
       console.log(this);
@@ -156,6 +164,8 @@ const jonas = {
     console.log(`Hey ${this.firstName}`);
   },
 };
+// NOTE: this in a arrow function call uses its lexical parent scope this keyword
+// NOTE: in greet() case, this is in greet function, this will point to it's parent scope which is the global object
 jonas.greet();
 jonas.calcAge();
 
@@ -213,7 +223,7 @@ console.log('Before marriage:', jessica);
 console.log('After marriage: ', marriedJessica);
 // marriedJessica = {};
 
-// Copying objects
+// NOTE:Copying objects
 const jessica2 = {
   firstName: 'Jessica',
   lastName: 'Williams',
@@ -230,4 +240,3 @@ jessicaCopy.family.push('John');
 console.log('Before marriage:', jessica2);
 console.log('After marriage: ', jessicaCopy);
 */
-
