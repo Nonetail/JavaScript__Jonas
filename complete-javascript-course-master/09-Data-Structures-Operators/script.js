@@ -2,6 +2,7 @@
 
 const weekdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 const openingHours = {
+  //NOTE: ES6 enhanced object literals computed property name
   [weekdays[3]]: {
     open: 12,
     close: 22,
@@ -23,9 +24,10 @@ const restaurant = {
   starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
   mainMenu: ['Pizza', 'Pasta', 'Risotto'],
 
-  // ES6 enhanced object literals
+  //NOTE: ES6 enhanced object literals
   openingHours,
 
+  //NOTE: ES6 enhanced object literals without function keyword
   order(starterIndex, mainIndex) {
     return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
   },
@@ -86,8 +88,9 @@ document.body.append(document.createElement('button'));
 
 document.querySelector('button').addEventListener('click', function () {
   const text = document.querySelector('textarea').value;
+  //NOTE:
   const rows = text.split('\n');
-
+  //NOTE:
   for (const [i, row] of rows.entries()) {
     const [first, second] = row.toLowerCase().trim().split('_');
 
@@ -95,6 +98,7 @@ document.querySelector('button').addEventListener('click', function () {
       second[0],
       second[0].toUpperCase()
     )}`;
+    //NOTE:
     console.log(`${output.padEnd(20)}${'✅'.repeat(i + 1)}`);
   }
 });
@@ -102,7 +106,7 @@ document.querySelector('button').addEventListener('click', function () {
 
 /*
 ///////////////////////////////////////
-// Working With Strings - Part 2
+// Working With Strings - Part 3
 
 // Split and join
 console.log('a+very+nice+string'.split('+'));
@@ -118,6 +122,7 @@ const capitalizeName = function (name) {
   const namesUpper = [];
 
   for (const n of names) {
+    //NOTE: we use array here since all stirngs are immutable
     // namesUpper.push(n[0].toUpperCase() + n.slice(1));
     namesUpper.push(n.replace(n[0], n[0].toUpperCase()));
   }
@@ -127,12 +132,13 @@ const capitalizeName = function (name) {
 capitalizeName('jessica ann smith davis');
 capitalizeName('jonas schmedtmann');
 
-// Padding
+//NOTE: Padding
 const message = 'Go to gate 23!';
 console.log(message.padStart(20, '+').padEnd(30, '+'));
 console.log('Jonas'.padStart(20, '+').padEnd(30, '+'));
 
 const maskCreditCard = function (number) {
+  //NOTE: String(number), 
   const str = number + '';
   const last = str.slice(-4);
   return last.padStart(str.length, '*');
@@ -142,7 +148,7 @@ console.log(maskCreditCard(64637836));
 console.log(maskCreditCard(43378463864647384));
 console.log(maskCreditCard('334859493847755774747'));
 
-// Repeat
+//NOTE: Repeat
 const message2 = 'Bad waether... All Departues Delayed... ';
 console.log(message2.repeat(5));
 
@@ -178,8 +184,9 @@ const loginEmail = '  Hello@Jonas.Io \n';
 const normalizedEmail = loginEmail.toLowerCase().trim();
 console.log(normalizedEmail);
 console.log(email === normalizedEmail);
+//NOTE: trimStart
 
-// replacing
+//NOTE: replacing
 const priceGB = '288,97£';
 const priceUS = priceGB.replace('£', '$').replace(',', '.');
 console.log(priceUS);
@@ -187,11 +194,12 @@ console.log(priceUS);
 const announcement =
   'All passengers come to boarding door 23. Boarding door 23!';
 
+//NOTE:
 console.log(announcement.replace('door', 'gate'));
 // console.log(announcement.replaceAll('door', 'gate'));
 console.log(announcement.replace(/door/g, 'gate'));
 
-// Booleans
+//NOTE: Booleans
 const plane = 'Airbus A320neo';
 console.log(plane.includes('A320'));
 console.log(plane.includes('Boeing'));
@@ -225,16 +233,20 @@ const plane = 'A320';
 console.log(plane[0]);
 console.log(plane[1]);
 console.log(plane[2]);
+//NOTE:
 console.log('B737'[0]);
 
 console.log(airline.length);
+//NOTE:
 console.log('B737'.length);
 
 console.log(airline.indexOf('r'));
 console.log(airline.lastIndexOf('r'));
+//NOTE:
 console.log(airline.indexOf('portugal'));
 
 console.log(airline.slice(4));
+//NOTE: no way to mutate string (they are primitive), end value not included  
 console.log(airline.slice(4, 7));
 
 console.log(airline.slice(0, airline.indexOf(' ')));
@@ -254,6 +266,7 @@ checkMiddleSeat('11B');
 checkMiddleSeat('23C');
 checkMiddleSeat('3E');
 
+//NOTE:
 console.log(new String('jonas'));
 console.log(typeof new String('jonas'));
 
@@ -290,7 +303,7 @@ const gameEvents = new Map([
 ]);
 
 /*
-// 1.
+//NOTE: 1.
 const events = [...new Set(gameEvents.values())];
 console.log(events);
 
@@ -307,7 +320,7 @@ console.log(
   `An event happened, on average, every ${time / gameEvents.size} minutes`
 );
 
-// 4.
+//NOTE: 4.
 for (const [min, event] of gameEvents) {
   const half = min <= 45 ? 'FIRST' : 'SECOND';
   console.log(`[${half} HALF] ${min}: ${event}`);
@@ -317,6 +330,7 @@ for (const [min, event] of gameEvents) {
 /*
 ///////////////////////////////////////
 // Maps: Iteration
+//NOTE: more effective way to create Map
 const question = new Map([
   ['question', 'What is the best programming language in the world?'],
   [1, 'C'],
@@ -328,13 +342,14 @@ const question = new Map([
 ]);
 console.log(question);
 
-// Convert object to map
+//NOTE: Convert object to map
 console.log(Object.entries(openingHours));
 const hoursMap = new Map(Object.entries(openingHours));
 console.log(hoursMap);
 
 // Quiz app
 console.log(question.get('question'));
+//NOTE: Map is an iterable, object is not (so we need Obejct.entries())
 for (const [key, value] of question) {
   if (typeof key === 'number') console.log(`Answer ${key}: ${value}`);
 }
@@ -344,7 +359,7 @@ console.log(answer);
 
 console.log(question.get(question.get('correct') === answer));
 
-// Convert map to array
+//NOTE: Convert map to array
 console.log([...question]);
 // console.log(question.entries());
 console.log([...question.keys()]);
@@ -352,7 +367,7 @@ console.log([...question.values()]);
 
 
 ///////////////////////////////////////
-// Maps: Fundamentals
+//NOTE: Maps: Fundamentals
 const rest = new Map();
 rest.set('name', 'Classico Italiano');
 rest.set(1, 'Firenze, Italy');
@@ -376,6 +391,7 @@ console.log(rest.has('categories'));
 rest.delete(2);
 // rest.clear();
 
+//NOTE: [1, 2] and [1, 2] are not the same object
 const arr = [1, 2];
 rest.set(arr, 'Test');
 rest.set(document.querySelector('h1'), 'Heading');
@@ -386,7 +402,7 @@ console.log(rest.get(arr));
 
 
 ///////////////////////////////////////
-// Sets
+//NOTE: Sets (iterable) accept iterables
 const ordersSet = new Set([
   'Pasta',
   'Pizza',
@@ -399,6 +415,7 @@ console.log(ordersSet);
 
 console.log(new Set('Jonas'));
 
+//NOTE:
 console.log(ordersSet.size);
 console.log(ordersSet.has('Pizza'));
 console.log(ordersSet.has('Bread'));
@@ -408,9 +425,10 @@ ordersSet.delete('Risotto');
 // ordersSet.clear();
 console.log(ordersSet);
 
+//NOTE:
 for (const order of ordersSet) console.log(order);
 
-// Example
+//NOTE: Example
 const staff = ['Waiter', 'Chef', 'Waiter', 'Manager', 'Chef', 'Waiter'];
 const staffUnique = [...new Set(staff)];
 console.log(staffUnique);
@@ -496,6 +514,7 @@ for (const [i, player] of game.scored.entries())
 const odds = Object.values(game.odds);
 let average = 0;
 for (const odd of odds) average += odd;
+//NOTE:
 average /= odds.length;
 console.log(average);
 
@@ -519,9 +538,9 @@ for (const player of game.scored) {
 
 /*
 ///////////////////////////////////////
-// Looping Objects: Object Keys, Values, and Entries
+//NOTE: Looping Objects: Object Keys, Values, and Entries
 
-// Property NAMES
+//NOTE: Property NAMES
 const properties = Object.keys(openingHours);
 console.log(properties);
 
@@ -546,7 +565,7 @@ for (const [day, { open, close }] of entries) {
 
 
 ///////////////////////////////////////
-// Optional Chaining
+//NOTE: Optional Chaining, null and undefined (NOT 0 or '') undefined returns
 if (restaurant.openingHours && restaurant.openingHours.mon)
   console.log(restaurant.openingHours.mon.open);
 
@@ -559,12 +578,13 @@ console.log(restaurant.openingHours?.mon?.open);
 // Example
 const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
+//NOTE: if the day is friday (value is 0 (falsy value))
 for (const day of days) {
   const open = restaurant.openingHours[day]?.open ?? 'closed';
   console.log(`On ${day}, we open at ${open}`);
 }
 
-// Methods
+//NOTE: Methods
 console.log(restaurant.order?.(0, 1) ?? 'Method does not exist');
 console.log(restaurant.orderRisotto?.(0, 1) ?? 'Method does not exist');
 
@@ -584,78 +604,21 @@ const menu = [...restaurant.starterMenu, ...restaurant.mainMenu];
 
 for (const item of menu) console.log(item);
 
+//NOTE: entries on array
 for (const [i, el] of menu.entries()) {
   console.log(`${i + 1}: ${el}`);
 }
 
 // console.log([...menu.entries()]);
 */
-
-///////////////////////////////////////
-// Coding Challenge #1
-
-/* 
-We're building a football betting app (soccer for my American friends 😅)!
-
-Suppose we get data from a web service about a certain game (below). In this challenge we're gonna work with the data. So here are your tasks:
-
-1. Create one player array for each team (variables 'players1' and 'players2')
-2. The first player in any player array is the goalkeeper and the others are field players. For Bayern Munich (team 1) create one variable ('gk') with the goalkeeper's name, and one array ('fieldPlayers') with all the remaining 10 field players
-3. Create an array 'allPlayers' containing all players of both teams (22 players)
-4. During the game, Bayern Munich (team 1) used 3 substitute players. So create a new array ('players1Final') containing all the original team1 players plus 'Thiago', 'Coutinho' and 'Perisic'
-5. Based on the game.odds object, create one variable for each odd (called 'team1', 'draw' and 'team2')
-6. Write a function ('printGoals') that receives an arbitrary number of player names (NOT an array) and prints each of them to the console, along with the number of goals that were scored in total (number of player names passed in)
-7. The team with the lower odd is more likely to win. Print to the console which team is more likely to win, WITHOUT using an if/else statement or the ternary operator.
-
-TEST DATA FOR 6: Use players 'Davies', 'Muller', 'Lewandowski' and 'Kimmich'. Then, call the function again with players from game.scored
-
-GOOD LUCK 😀
-*/
-
 /*
-// 1.
-const [players1, players2] = game.players;
-console.log(players1, players2);
-
-// 2.
-const [gk, ...fieldPlayers] = players1;
-console.log(gk, fieldPlayers);
-
-// 3.
-const allPlayers = [...players1, ...players2];
-console.log(allPlayers);
-
-// 4.
-const players1Final = [...players1, 'Thiago', 'Coutinho', 'Periscic'];
-
-// 5.
-const {
-  odds: { team1, x: draw, team2 },
-} = game;
-console.log(team1, draw, team2);
-
-// 6.
-const printGoals = function (...players) {
-  console.log(players);
-  console.log(`${players.length} goals were scored`);
-};
-
-// printGoals('Davies', 'Muller', 'Lewandowski', 'Kimmich');
-// printGoals('Davies', 'Muller');
-printGoals(...game.scored);
-
-// 7.
-team1 < team2 && console.log('Team 1 is more likely to win');
-team1 > team2 && console.log('Team 2 is more likely to win');
-
-
 ///////////////////////////////////////
 // The Nullish Coalescing Operator
 restaurant.numGuests = 0;
 const guests = restaurant.numGuests || 10;
 console.log(guests);
 
-// Nullish: null and undefined (NOT 0 or '')
+//NOTE: Nullish: null and undefined (NOT 0 or '')
 const guestCorrect = restaurant.numGuests ?? 10;
 console.log(guestCorrect);
 
@@ -663,7 +626,7 @@ console.log(guestCorrect);
 // Short Circuiting (&& and ||)
 
 console.log('---- OR ----');
-// Use ANY data type, return ANY data type, short-circuiting
+//NOTE: Use ANY data type, return ANY data type, short-circuiting
 console.log(3 || 'Jonas');
 console.log('' || 'Jonas');
 console.log(true || 0);
@@ -671,6 +634,7 @@ console.log(undefined || null);
 
 console.log(undefined || 0 || '' || 'Hello' || 23 || null);
 
+//NOTE:
 restaurant.numGuests = 0;
 const guests1 = restaurant.numGuests ? restaurant.numGuests : 10;
 console.log(guests1);
@@ -679,12 +643,13 @@ const guests2 = restaurant.numGuests || 10;
 console.log(guests2);
 
 console.log('---- AND ----');
+//NOTE:
 console.log(0 && 'Jonas');
 console.log(7 && 'Jonas');
 
 console.log('Hello' && 23 && null && 'jonas');
 
-// Practical example
+//NOTE: Practical example
 if (restaurant.orderPizza) {
   restaurant.orderPizza('mushrooms', 'spinach');
 }
@@ -696,13 +661,14 @@ restaurant.orderPizza && restaurant.orderPizza('mushrooms', 'spinach');
 // Rest Pattern and Parameters
 // 1) Destructuring
 
-// SPREAD, because on RIGHT side of =
+//NOTE: SPREAD, because on RIGHT side of =
 const arr = [1, 2, ...[3, 4]];
 
 // REST, because on LEFT side of =
 const [a, b, ...others] = [1, 2, 3, 4, 5];
 console.log(a, b, others);
 
+//NOTE: a skipped element here
 const [pizza, , risotto, ...otherFood] = [
   ...restaurant.mainMenu,
   ...restaurant.starterMenu,
@@ -713,7 +679,7 @@ console.log(pizza, risotto, otherFood);
 const { sat, ...weekdays } = restaurant.openingHours;
 console.log(weekdays);
 
-// 2) Functions
+//NOTE: 2) Functions
 const add = function (...numbers) {
   let sum = 0;
   for (let i = 0; i < numbers.length; i++) sum += numbers[i];
@@ -724,15 +690,17 @@ add(2, 3);
 add(5, 3, 7, 2);
 add(8, 2, 5, 3, 2, 1, 4);
 
+//NOTE: Take a very closer look at this !!!
 const x = [23, 5, 7];
 add(...x);
 
 restaurant.orderPizza('mushrooms', 'onion', 'olives', 'spinach');
+//NOTE: rest para here get an empty array
 restaurant.orderPizza('mushrooms');
 
 
 ///////////////////////////////////////
-// The Spread Operator (...)
+//NOTE: The Spread Operator (...) only use when building an array or passing values to functions (multiple values seperated by comma)
 
 const arr = [7, 8, 9];
 const badNewArr = [1, 2, arr[0], arr[1], arr[2]];
@@ -741,20 +709,20 @@ console.log(badNewArr);
 const newArr = [1, 2, ...arr];
 console.log(newArr);
 
-console.log(...newArr);
+// NOTE: console.log(...newArr);
 console.log(1, 2, 7, 8, 9);
 
 const newMenu = [...restaurant.mainMenu, 'Gnocci'];
 console.log(newMenu);
 
-// Copy array
+//NOTE: Shallow Copy array
 const mainMenuCopy = [...restaurant.mainMenu];
 
 // Join 2 arrays
 const menu = [...restaurant.starterMenu, ...restaurant.mainMenu];
 console.log(menu);
 
-// Iterables: arrays, strings, maps, sets. NOT objects
+//NOTE: Iterables: arrays, strings, maps, sets. NOT objects
 const str = 'Jonas';
 const letters = [...str, ' ', 'S.'];
 console.log(letters);
@@ -772,7 +740,7 @@ console.log(ingredients);
 restaurant.orderPasta(ingredients[0], ingredients[1], ingredients[2]);
 restaurant.orderPasta(...ingredients);
 
-// Objects
+//NOTE: Objects
 const newRestaurant = { foundedIn: 1998, ...restaurant, founder: 'Guiseppe' };
 console.log(newRestaurant);
 
@@ -806,18 +774,18 @@ const {
 } = restaurant;
 console.log(restaurantName, hours, tags);
 
-// Default values
+// NOTE: Default values
 const { menu = [], starterMenu: starters = [] } = restaurant;
 console.log(menu, starters);
 
-// Mutating variables
+// NOTE: Mutating variables
 let a = 111;
 let b = 999;
 const obj = { a: 23, b: 7, c: 14 };
 ({ a, b } = obj);
 console.log(a, b);
 
-// Nested objects
+// NOTE: Nested objects
 const {
   fri: { open: o, close: c },
 } = openingHours;
@@ -827,7 +795,7 @@ console.log(o, c);
 ///////////////////////////////////////
 // Destructuring Arrays
 const arr = [2, 3, 4];
-const a = arr[0];
+const a = arr[0]; 
 const b = arr[1];
 const c = arr[2];
 
@@ -835,6 +803,7 @@ const [x, y, z] = arr;
 console.log(x, y, z);
 console.log(arr);
 
+// NOTE: Ignore the sec para
 let [main, , secondary] = restaurant.categories;
 console.log(main, secondary);
 
@@ -844,6 +813,7 @@ console.log(main, secondary);
 // secondary = temp;
 // console.log(main, secondary);
 
+// NOTE: Switching variables
 [main, secondary] = [secondary, main];
 console.log(main, secondary);
 
@@ -853,11 +823,13 @@ console.log(starter, mainCourse);
 
 // Nested destructuring
 const nested = [2, 4, [5, 6]];
+
+// NOTE: Nested destructuring
 // const [i, , j] = nested;
 const [i, , [j, k]] = nested;
 console.log(i, j, k);
 
-// Default values
+// NOTE: Default values
 const [p = 1, q = 1, r = 1] = [8, 9];
 console.log(p, q, r);
 */
