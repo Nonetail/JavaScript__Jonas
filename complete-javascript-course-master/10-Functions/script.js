@@ -8,9 +8,10 @@ const bookings = [];
 const createBooking = function (
   flightNum,
   numPassengers = 1,
+  //NOTE:
   price = 199 * numPassengers
 ) {
-  // ES5
+  //NOTE: ES5
   // numPassengers = numPassengers || 1;
   // price = price || 199;
 
@@ -28,6 +29,7 @@ createBooking('LH123', 2, 800);
 createBooking('LH123', 2);
 createBooking('LH123', 5);
 
+//NOTE:
 createBooking('LH123', undefined, 1000);
 
 
@@ -39,7 +41,8 @@ const jonas = {
   passport: 24739479284,
 };
 
-const checkIn = function (flightNum, passenger) {
+const checkIn = function (flightNum, passenger) { 
+  //NOTE: function para copy by value and copy by reference 
   flightNum = 'LH999';
   passenger.name = 'Mr. ' + passenger.name;
 
@@ -77,11 +80,12 @@ const upperFirstWord = function (str) {
   return [first.toUpperCase(), ...others].join(' ');
 };
 
-// Higher-order function
+//NOTE: Higher-order function
 const transformer = function (str, fn) {
   console.log(`Original string: ${str}`);
   console.log(`Transformed string: ${fn(str)}`);
 
+  //NOTE:
   console.log(`Transformed by: ${fn.name}`);
 };
 
@@ -108,9 +112,10 @@ const greeterHey = greet('Hey');
 greeterHey('Jonas');
 greeterHey('Steven');
 
+//NOTE:
 greet('Hello')('Jonas');
 
-// Challenge
+//NOTE: Challenge
 const greetArr = greeting => name => console.log(`${greeting} ${name}`);
 
 greetArr('Hi')('Jonas');
@@ -145,7 +150,7 @@ const book = lufthansa.book;
 // Does NOT work
 // book(23, 'Sarah Williams');
 
-// Call method
+//NOTE: Call method
 book.call(eurowings, 23, 'Sarah Williams');
 console.log(eurowings);
 
@@ -160,7 +165,7 @@ const swiss = {
 
 book.call(swiss, 583, 'Mary Cooper');
 
-// Apply method
+//NOTE: Apply method (not often used anymore)
 const flightData = [583, 'George Cooper'];
 book.apply(swiss, flightData);
 console.log(swiss);
@@ -177,11 +182,12 @@ const bookLX = book.bind(swiss);
 
 bookEW(23, 'Steven Williams');
 
+//NOTE: returns a new function and can also pre-set a part of function argument
 const bookEW23 = book.bind(eurowings, 23);
 bookEW23('Jonas Schmedtmann');
 bookEW23('Martha Cooper');
 
-// With Event Listeners
+//NOTE: With Event Listeners, `this` in event handler default points to the element 
 lufthansa.planes = 300;
 lufthansa.buyPlane = function () {
   console.log(this);
@@ -193,12 +199,14 @@ lufthansa.buyPlane = function () {
 
 document
   .querySelector('.buy')
+  //NOTE: call won't work here since it will call the function
   .addEventListener('click', lufthansa.buyPlane.bind(lufthansa));
 
-// Partial application
+//NOTE: Partial application
 const addTax = (rate, value) => value + value * rate;
 console.log(addTax(0.1, 200));
 
+//NOTE:
 const addVAT = addTax.bind(null, 0.23);
 // addVAT = value => value + value * 0.23;
 
@@ -256,12 +264,12 @@ const poll = {
   // This generates [0, 0, 0, 0]. More in the next section 😃
   answers: new Array(4).fill(0),
   registerNewAnswer() {
-    // Get answer
+    //NOTE: Get answer
     const answer = Number(
       prompt(
         `${this.question}\n${this.options.join('\n')}\n(Write option number)`
       )
-    );
+    ); 
     console.log(answer);
 
     // Register answer
@@ -287,6 +295,7 @@ document
   .querySelector('.poll')
   .addEventListener('click', poll.registerNewAnswer.bind(poll));
 
+//NOTE:
 poll.displayResults.call({ answers: [5, 2, 3] }, 'string');
 poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] }, 'string');
 poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] });
@@ -302,16 +311,17 @@ const runOnce = function () {
 };
 runOnce();
 
-// IIFE
+//NOTE: IIFE transform statement to expression
 (function () {
   console.log('This will never run again');
   const isPrivate = 23;
 })();
 
 // console.log(isPrivate);
-
+//NOTE:
 (() => console.log('This will ALSO never run again'))();
 
+//NOTE:
 {
   const isPrivate = 23;
   var notPrivate = 46;
@@ -331,6 +341,7 @@ const secureBooking = function () {
   };
 };
 
+//NOTE:
 const booker = secureBooking();
 
 booker();
@@ -342,7 +353,7 @@ console.dir(booker);
 
 ///////////////////////////////////////
 // More Closure Examples
-// Example 1
+//NOTE: Example 1
 let f;
 
 const g = function () {
@@ -366,6 +377,7 @@ console.dir(f);
 // Re-assigning f function
 h();
 f();
+//NOTE: can see scope
 console.dir(f);
 
 // Example 2
@@ -407,4 +419,3 @@ GOOD LUCK 😀
   });
 })();
 */
-
