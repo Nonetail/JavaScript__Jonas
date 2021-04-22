@@ -39,20 +39,23 @@ document.addEventListener('keydown', function (e) {
 ///////////////////////////////////////
 // Button scrolling
 btnScrollTo.addEventListener('click', function (e) {
+  //NOTE: method returns a DOMRect object providing information about the size of an element and its position relative to the viewport.
   const s1coords = section1.getBoundingClientRect();
   console.log(s1coords);
 
   console.log(e.target.getBoundingClientRect());
 
+  //NOTE: returns the number of pixels scrolled along the horizontal and vertical axis
   console.log('Current scroll (X/Y)', window.pageXOffset, window.pageYOffset);
 
+  //NOTE: clientWidth here doesn't include the scrollbar
   console.log(
     'height/width viewport',
     document.documentElement.clientHeight,
     document.documentElement.clientWidth
   );
 
-  // Scrolling
+  //NOTE: old way of Scrolling
   // window.scrollTo(
   //   s1coords.left + window.pageXOffset,
   //   s1coords.top + window.pageYOffset
@@ -64,12 +67,14 @@ btnScrollTo.addEventListener('click', function (e) {
   //   behavior: 'smooth',
   // });
 
+  //NOTE: new way of scrolling
   section1.scrollIntoView({ behavior: 'smooth' });
 });
 
 ///////////////////////////////////////
 // Page navigation
 
+//NOTE: this works fine, only issue is that we used many event handlers
 // document.querySelectorAll('.nav__link').forEach(function (el) {
 //   el.addEventListener('click', function (e) {
 //     e.preventDefault();
@@ -82,6 +87,7 @@ btnScrollTo.addEventListener('click', function (e) {
 // 1. Add event listener to common parent element
 // 2. Determine what element originated the event
 
+//NOTE: nice example of event delegation
 document.querySelector('.nav__links').addEventListener('click', function (e) {
   e.preventDefault();
 
@@ -299,6 +305,10 @@ slider();
 // Selecting, Creating, and Deleting Elements
 
 // Selecting elements
+//NOTE:GOOGLE: When an HTML document is loaded into a web browser, it becomes a document object.
+//NOTE: The document object is the root node of the HTML document.
+console.log(document);
+//NOTE: Returns the <html> element
 console.log(document.documentElement);
 console.log(document.head);
 console.log(document.body);
@@ -307,23 +317,30 @@ const header = document.querySelector('.header');
 const allSections = document.querySelectorAll('.section');
 console.log(allSections);
 
+//NOTE: way to select elements
 document.getElementById('section--1');
+//NOTE: returns htmlcollections: it is automatically updated when the underlying document is changed.
 const allButtons = document.getElementsByTagName('button');
 console.log(allButtons);
-
+//NOTE: returns htmlcollections
 console.log(document.getElementsByClassName('btn'));
 
-// Creating and inserting elements
+//NOTE: Creating and inserting elements
 const message = document.createElement('div');
+//NOTE: work with classes
 message.classList.add('cookie-message');
+//NOTE:GOOGLE: both textContent and innerHTML can set content, but they have differences
 // message.textContent = 'We use cookied for improved functionality and analytics.';
 message.innerHTML =
   'We use cookied for improved functionality and analytics. <button class="btn btn--close-cookie">Got it!</button>';
 
+//NOTE:GOOGLE: different ways to insert html element
 // header.prepend(message);
 header.append(message);
+//NOTE: a dom element is unique and can only exist in one place!!!, but we can clone more,
 // header.append(message.cloneNode(true));
 
+//NOTE: we are moving the same dom element
 // header.before(message);
 // header.after(message);
 
@@ -331,7 +348,9 @@ header.append(message);
 document
   .querySelector('.btn--close-cookie')
   .addEventListener('click', function () {
+    //NOTE: remove a dom element recent
     // message.remove();
+    //NOTE: remove a dom element old
     message.parentElement.removeChild(message);
   });
 
@@ -340,49 +359,59 @@ document
 // Styles, Attributes and Classes
   
 // Styles
+//NOTE: way to access the styles
 message.style.backgroundColor = '#37383d';
 message.style.width = '120%';
 
+//NOTE: we can only access the inline styles(like above, styles we set by ourselves)
 console.log(message.style.color);
 console.log(message.style.backgroundColor);
 
+//NOTE: get computed (rendered) styles from the page 
 console.log(getComputedStyle(message).color);
 console.log(getComputedStyle(message).height);
 
 message.style.height =
+  //GOOGLE: parseFloat returns the floating number part of the argument
   Number.parseFloat(getComputedStyle(message).height, 10) + 30 + 'px';
 
+//NOTE: how to change css variables
 document.documentElement.style.setProperty('--color-primary', 'orangered');
 
 // Attributes
 const logo = document.querySelector('.nav__logo');
 console.log(logo.alt);
+//NOTE: className in js is class in css
 console.log(logo.className);
 
+//NOTE: how to change attributes just like .style
 logo.alt = 'Beautiful minimalist logo';
 
-// Non-standard
+//NOTE: how to change Non-standard attribute
 console.log(logo.designer);
 console.log(logo.getAttribute('designer'));
 logo.setAttribute('company', 'Bankist');
 
+//NOTE: get absolute url from src, and attribute from src
 console.log(logo.src);
 console.log(logo.getAttribute('src'));
 
 const link = document.querySelector('.nav__link--btn');
+//NOTE: get absolute href from src, and attribute from href
+//GOOGLE: absolute path and relative path
 console.log(link.href);
 console.log(link.getAttribute('href'));
 
-// Data attributes
+//NOTE: how to access Data attributes, camel case in js
 console.log(logo.dataset.versionNumber);
 
-// Classes
+//NOTE: methods for change css Classes
 logo.classList.add('c', 'j');
 logo.classList.remove('c', 'j');
 logo.classList.toggle('c');
 logo.classList.contains('c'); // not includes
 
-// Don't use
+//NOTE: Don't use, bad practice
 logo.clasName = 'jonas';
 
 
@@ -394,10 +423,13 @@ const alertH1 = function (e) {
   alert('addEventListener: Great! You are reading the heading :D');
 };
 
+//NOTE: mouse enter event
 h1.addEventListener('mouseenter', alertH1);
 
+//NOTE: way to remove event listener, and put another same looking function won't work
 setTimeout(() => h1.removeEventListener('mouseenter', alertH1), 3000);
 
+//NOTE: old way of adding event listener, can only add one on h1 element, and can't be removed
 // h1.onmouseenter = function (e) {
 //   alert('onmouseenter: Great! You are reading the heading :D');
 // };
@@ -410,12 +442,17 @@ const randomInt = (min, max) =>
 const randomColor = () =>
   `rgb(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)})`;
 
+//NOTE: very nice example of event bubbling
 document.querySelector('.nav__link').addEventListener('click', function (e) {
+  //NOTE: in event handler, this points to the attached element
   this.style.backgroundColor = randomColor();
+  //NOTE: if an event has been captured in bubbling phase, the e.target will still point to where event happened
+  //NOTE: e.currentTarget is where the event handler has been attached
   console.log('LINK', e.target, e.currentTarget);
   console.log(e.currentTarget === this);
 
-  // Stop propagation
+  //NOTE: Stop propagation can help in very complex application, many handlers for the same event,
+  //NOTE: but in general, it's not a good idea
   // e.stopPropagation();
 });
 
@@ -427,7 +464,8 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
 document.querySelector('.nav').addEventListener('click', function (e) {
   this.style.backgroundColor = randomColor();
   console.log('NAV', e.target, e.currentTarget);
-});
+  //NOTE: set third argument to true will let event listener listens event in capture phase, not bubbling phase, rarely used these days
+}, true);
 
 
 ///////////////////////////////////////

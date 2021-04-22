@@ -1,5 +1,8 @@
 /* The page is NOT responsive. You can implement responsiveness yourself if you wanna have some fun 😃 */
 
+/*NOTE: Selects the root element of the document:
+   <html> in the case of HTML */
+/*NOTE: A common best practice is to define custom properties on the :root pseudo-class, so that it can be applied globally across your HTML document: */
 :root {
   --color-primary: #5ec576;
   --color-secondary: #ffcb03;
