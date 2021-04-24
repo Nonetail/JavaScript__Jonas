@@ -100,11 +100,13 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
 
 ///////////////////////////////////////
 // Tabbed component
+//NOTE: very good example of event delegation and usage of dataset
 
 tabsContainer.addEventListener('click', function (e) {
+  //NOTE: nice matching strategy
   const clicked = e.target.closest('.operations__tab');
 
-  // Guard clause
+  //NOTE: Guard clause
   if (!clicked) return;
 
   // Remove active classes
@@ -121,8 +123,9 @@ tabsContainer.addEventListener('click', function (e) {
 });
 
 ///////////////////////////////////////
-// Menu fade animation
+//NOTE: very good example of  Menu fade animation
 const handleHover = function (e) {
+  //NOTE: we don't use closest here since there are no child element of the nav link
   if (e.target.classList.contains('nav__link')) {
     const link = e.target;
     const siblings = link.closest('.nav').querySelectorAll('.nav__link');
@@ -136,11 +139,16 @@ const handleHover = function (e) {
 };
 
 // Passing "argument" into handler
+//NOTE:GOOGLE: mouseover/mouseout bubbles, but mouseenter/mouseleave doesn't
+//NOTE: we can use bind here to pass argument (looks a little bit nicer), and use e.currentTarget to use old 'this' keyword value
 nav.addEventListener('mouseover', handleHover.bind(0.5));
 nav.addEventListener('mouseout', handleHover.bind(1));
 
+//NOTE: use anonymous function to pass argument to event handler
+// nav.addEventListener('mouseover', e => handleHover(e, 0.5));
+
 ///////////////////////////////////////
-// Sticky navigation: Intersection Observer API
+//NOTE: Sticky navigation: Intersection Observer API
 
 const header = document.querySelector('.header');
 const navHeight = nav.getBoundingClientRect().height;
@@ -149,6 +157,7 @@ const stickyNav = function (entries) {
   const [entry] = entries;
   // console.log(entry);
 
+  //NOTE: one line if else statement
   if (!entry.isIntersecting) nav.classList.add('sticky');
   else nav.classList.remove('sticky');
 };
@@ -156,18 +165,19 @@ const stickyNav = function (entries) {
 const headerObserver = new IntersectionObserver(stickyNav, {
   root: null,
   threshold: 0,
+  //GOOGLE: rootMargin example
   rootMargin: `-${navHeight}px`,
 });
 
 headerObserver.observe(header);
 
 ///////////////////////////////////////
-// Reveal sections
+//NOTE: good example of Reveal sections
+//GOOGLE: revealSection, the callback we setup for the observer will be executed now for the first time, (even if the target is currently not visible)
 const allSections = document.querySelectorAll('.section');
 
 const revealSection = function (entries, observer) {
   const [entry] = entries;
-
   if (!entry.isIntersecting) return;
 
   entry.target.classList.remove('section--hidden');
@@ -185,6 +195,7 @@ allSections.forEach(function (section) {
 });
 
 // Lazy loading images
+//NOTE: attribute selector
 const imgTargets = document.querySelectorAll('img[data-src]');
 
 const loadImg = function (entries, observer) {
@@ -195,6 +206,7 @@ const loadImg = function (entries, observer) {
   // Replace src with data-src
   entry.target.src = entry.target.dataset.src;
 
+  //NOTE: replace the image may take time, so we use load event listener here
   entry.target.addEventListener('load', function () {
     entry.target.classList.remove('lazy-img');
   });
@@ -211,7 +223,8 @@ const imgObserver = new IntersectionObserver(loadImg, {
 imgTargets.forEach(img => imgObserver.observe(img));
 
 ///////////////////////////////////////
-// Slider
+//NOTE: Slider
+//NOTE: put everything into a function won't pollute the global namespace
 const slider = function () {
   const slides = document.querySelectorAll('.slide');
   const btnLeft = document.querySelector('.slider__btn--left');
@@ -224,6 +237,7 @@ const slider = function () {
   // Functions
   const createDots = function () {
     slides.forEach(function (_, i) {
+      //NOTE: way of using interAdjacentHTML
       dotContainer.insertAdjacentHTML(
         'beforeend',
         `<button class="dots__dot" data-slide="${i}"></button>`
@@ -241,6 +255,7 @@ const slider = function () {
       .classList.add('dots__dot--active');
   };
 
+  //NOTE:
   const goToSlide = function (slide) {
     slides.forEach(
       (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
@@ -286,6 +301,7 @@ const slider = function () {
     e.key === 'ArrowRight' && nextSlide();
   });
 
+  //NOTE: way of using event delegation
   dotContainer.addEventListener('click', function (e) {
     if (e.target.classList.contains('dots__dot')) {
       const { slide } = e.target.dataset;
@@ -474,8 +490,11 @@ const h1 = document.querySelector('h1');
 
 // Going downwards: child
 console.log(h1.querySelectorAll('.highlight'));
+//NOTE: all direct child nodes (include comment, text, ...)
 console.log(h1.childNodes);
+//NOTE: returns direct child html elements (html collections) (html only)
 console.log(h1.children);
+//NOTE: get first or last element child
 h1.firstElementChild.style.color = 'white';
 h1.lastElementChild.style.color = 'orangered';
 
@@ -483,17 +502,21 @@ h1.lastElementChild.style.color = 'orangered';
 console.log(h1.parentNode);
 console.log(h1.parentElement);
 
+//NOTE: find the closest parent element (opposite to query selector), custom css var in js
 h1.closest('.header').style.background = 'var(--gradient-secondary)';
 
+//NOTE: can find itself
 h1.closest('h1').style.background = 'var(--gradient-primary)';
 
-// Going sideways: siblings
+//NOTE: Going sideways: siblings element
 console.log(h1.previousElementSibling);
 console.log(h1.nextElementSibling);
 
+//NOTE: Going sideways: siblings node!
 console.log(h1.previousSibling);
 console.log(h1.nextSibling);
 
+//NOTE: get all siblings
 console.log(h1.parentElement.children);
 [...h1.parentElement.children].forEach(function (el) {
   if (el !== h1) el.style.transform = 'scale(0.5)';
@@ -504,6 +527,7 @@ console.log(h1.parentElement.children);
 const initialCoords = section1.getBoundingClientRect();
 console.log(initialCoords);
 
+//NOTE:GOOGLE: The scroll event works both on the window and on scrollable elements.
 window.addEventListener('scroll', function () {
   console.log(window.scrollY);
 
@@ -530,18 +554,23 @@ observer.observe(section1);
 
 
 ///////////////////////////////////////
-// Lifecycle DOM Events
+//NOTE:GOOGLE: Lifecycle DOM Events
+//NOTE: this event does not wait for images and other external resources to load, just html and js need to be loaded
 document.addEventListener('DOMContentLoaded', function (e) {
   console.log('HTML parsed and DOM tree built!', e);
 });
 
+//NOTE: not only html and js, but images and other resources like css are loaded
 window.addEventListener('load', function (e) {
   console.log('Page fully loaded', e);
 });
 
 window.addEventListener('beforeunload', function (e) {
+  //NOTE: need to make beforeunload work in some browsers
   e.preventDefault();
   console.log(e);
   e.returnValue = '';
 });
 */
+
+//NOTE: GOOGLE: diff between window and document object http://eligeske.com/jquery/what-is-the-difference-between-document-and-window-objects-2/
