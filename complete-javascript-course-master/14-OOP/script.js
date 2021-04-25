@@ -3,30 +3,36 @@
 /*
 ///////////////////////////////////////
 // Constructor Functions and the new Operator
+//NOTE: Capital letter for convention constuctor function name
+//NOTE: arrow function can't be use as constuctor function, since it doesn't has it's own this keyword
 const Person = function (firstName, birthYear) {
   // Instance properties
   this.firstName = firstName;
   this.birthYear = birthYear;
 
-  // Never to this!
+  //NOTE: Never to this! bad practice: if we create 1000 instances, we would create 1000 methods in them!
   // this.calcAge = function () {
   //   console.log(2037 - this.birthYear);
   // };
 };
 
+//NOTE: only diff between construtor function and normal function is to use new before constructor function
 const jonas = new Person('Jonas', 1991);
 console.log(jonas);
 
 // 1. New {} is created
 // 2. function is called, this = {}
+//NOTE: 
 // 3. {} linked to prototype
 // 4. function automatically return {}
 
 const matilda = new Person('Matilda', 2017);
 const jack = new Person('Jack', 1975);
 
+//NOTE:
 console.log(jonas instanceof Person);
 
+//NOTE: native way of implementing static method on construtors
 Person.hey = function () {
   console.log('Hey there 👋');
   console.log(this);
@@ -37,6 +43,7 @@ Person.hey();
 // Prototypes
 console.log(Person.prototype);
 
+//NOTE: GOOGLE: All functions have a special property named prototype which point to the prototype of the created persons  
 Person.prototype.calcAge = function () {
   console.log(2037 - this.birthYear);
 };
@@ -44,44 +51,54 @@ Person.prototype.calcAge = function () {
 jonas.calcAge();
 matilda.calcAge();
 
+//NOTE: how object access the prototype of it
 console.log(jonas.__proto__);
 console.log(jonas.__proto__ === Person.prototype);
 
+//NOTE:
 console.log(Person.prototype.isPrototypeOf(jonas));
 console.log(Person.prototype.isPrototypeOf(matilda));
 console.log(Person.prototype.isPrototypeOf(Person));
 
 // .prototyeOfLinkedObjects
 
+//NOTE: we can set properties on prototype as well! not only method!
 Person.prototype.species = 'Homo Sapiens';
 console.log(jonas.species, matilda.species);
 
+//NOTE: not includintg inherited properties
 console.log(jonas.hasOwnProperty('firstName'));
 console.log(jonas.hasOwnProperty('species'));
 
 
 ///////////////////////////////////////
-// Prototypal Inheritance on Built-In Objects
+//Prototypal Inheritance on Built-In Objects
 console.log(jonas.__proto__);
-// Object.prototype (top of prototype chain)
+//NOTE: TEST: Object.prototype (top of prototype chain)
 console.log(jonas.__proto__.__proto__);
 console.log(jonas.__proto__.__proto__.__proto__);
 
+//TEST: prototype.constructor will point back to the constructor itself
 console.dir(Person.prototype.constructor);
 
+//TEST:
 const arr = [3, 6, 6, 5, 6, 9, 9]; // new Array === []
 console.log(arr.__proto__);
 console.log(arr.__proto__ === Array.prototype);
 
+//TEST:
 console.log(arr.__proto__.__proto__);
 
+//TEST: NOTE: can add methods on build-in objects but bad practice
 Array.prototype.unique = function () {
   return [...new Set(this)];
 };
 
 console.log(arr.unique());
 
+//NOTE: TEST: can have a look at dom prototype inheritance structure
 const h1 = document.querySelector('h1');
+//NOTE: TEST: can have a look at function prototype inheritance structure
 console.dir(x => x + 1);
 */
 
@@ -128,7 +145,7 @@ bmw.accelerate();
 ///////////////////////////////////////
 // ES6 Classes
 
-// Class expression
+//NOTE: Class expression
 // const PersonCl = class {}
 
 // Class declaration
@@ -138,22 +155,26 @@ class PersonCl {
     this.birthYear = birthYear;
   }
 
-  // Instance methods
-  // Methods will be added to .prototype property
+  //NOTE: Instance methods
+  //NOTE: Methods will be added to .prototype property
   calcAge() {
     console.log(2037 - this.birthYear);
   }
 
+  //NOTE: no comma between the methods
   greet() {
     console.log(`Hey ${this.fullName}`);
   }
 
+  //NOTE: getter is like any other methods we set on the prototype
   get age() {
     return 2037 - this.birthYear;
   }
 
   // Set a property that already exists
+  //NOTE: use setting as validation
   set fullName(name) {
+    //NOTE: GOOGLE: TEST: _fullName avoid conflict with fullName, setting here can work with this.fullName = fullName; in constructor
     if (name.includes(' ')) this._fullName = name;
     else alert(`${name} is not a full name!`);
   }
@@ -162,9 +183,10 @@ class PersonCl {
     return this._fullName;
   }
 
-  // Static method
+  //NOTE: Static method only available on constructor
   static hey() {
     console.log('Hey there 👋');
+    //NOTE: this here points to the constuctor function since we call it by PersonCl.hey();
     console.log(this);
   }
 }
@@ -174,16 +196,19 @@ console.log(jessica);
 jessica.calcAge();
 console.log(jessica.age);
 
+//NOTE: behind the scenes, class PersonCl is the syntatic sugar of constructor function PersonCl
 console.log(jessica.__proto__ === PersonCl.prototype);
 
+//TEST:
 // PersonCl.prototype.greet = function () {
 //   console.log(`Hey ${this.firstName}`);
 // };
 jessica.greet();
 
-// 1. Classes are NOT hoisted
-// 2. Classes are first-class citizes
-// 3. Classes are executed in strict mode
+//NOTE:
+// 1. Classes are NOT hoisted (expressions and declarations)
+// 2. Classes are first-class citizes (we can pass them into functions, and return them from functions)
+// 3. Classes are executed in strict mode (code inside class is in strict mode)
 
 const walter = new PersonCl('Walter White', 1965);
 // PersonCl.hey();
@@ -191,6 +216,7 @@ const walter = new PersonCl('Walter White', 1965);
 
 ///////////////////////////////////////
 // Setters and Getters
+//NOTE: every object in js has setters and getters properties
 const account = {
   owner: 'Jonas',
   movements: [200, 530, 120, 300],
@@ -204,14 +230,16 @@ const account = {
   },
 };
 
+//NOTE: we use the getter here as a property
 console.log(account.latest);
 
+//NOTE: TEST: we use the setter here as a property
 account.latest = 50;
 console.log(account.movements);
 
 
 ///////////////////////////////////////
-// Object.create
+//NOTE: Object.create
 const PersonProto = {
   calcAge() {
     console.log(2037 - this.birthYear);
@@ -223,6 +251,7 @@ const PersonProto = {
   },
 };
 
+//NOTE: create an object steven which links to its prototype PersonProto; (without creating a constuctor function)
 const steven = Object.create(PersonProto);
 console.log(steven);
 steven.name = 'Steven';
@@ -231,6 +260,7 @@ steven.calcAge();
 
 console.log(steven.__proto__ === PersonProto);
 
+//NOTE: init data!
 const sarah = Object.create(PersonProto);
 sarah.init('Sarah', 1979);
 sarah.calcAge();
@@ -288,6 +318,8 @@ console.log(ford);
 ///////////////////////////////////////
 // Inheritance Between "Classes": Constructor Functions
 
+/*
+//NOTE: Good example of Inheritance Between "Classes": Constructor Functions
 const Person = function (firstName, birthYear) {
   this.firstName = firstName;
   this.birthYear = birthYear;
@@ -298,28 +330,38 @@ Person.prototype.calcAge = function () {
 };
 
 const Student = function (firstName, birthYear, course) {
+  //NOTE: use .call method to call a constuctor function with this keyword!
   Person.call(this, firstName, birthYear);
   this.course = course;
 };
 
-// Linking prototypes
+//NOTE: Linking prototypes
+//NOTE: we need to use Object.create before adding methods to Student.prototype, since Object.create creates an empty object!
 Student.prototype = Object.create(Person.prototype);
 
 Student.prototype.introduce = function () {
   console.log(`My name is ${this.firstName} and I study ${this.course}`);
 };
 
+//TEST: NOTE:
 const mike = new Student('Mike', 2020, 'Computer Science');
 mike.introduce();
 mike.calcAge();
 
+//TEST: NOTE:
 console.log(mike.__proto__);
 console.log(mike.__proto__.__proto__);
 
+//NOTE: GOOGLE: object instanceof constructor
+//NOTE: The instanceof operator tests the presence of constructor.prototype in object's prototype chain.
 console.log(mike instanceof Student);
 console.log(mike instanceof Person);
 console.log(mike instanceof Object);
 
+//NOTE: TEST: GOOGLE:
+//If you don't set Rectangle.prototype.constructor to Rectangle,
+//it will take the prototype.constructor of Shape (parent).
+//To avoid that, we set the prototype.constructor to Rectangle (child).
 Student.prototype.constructor = Student;
 console.dir(Student.prototype.constructor);
 */
@@ -418,9 +460,14 @@ class PersonCl {
   }
 }
 
+//NOTE: extends here will link the prototypes of the classes 
 class StudentCl extends PersonCl {
+  //GOOGLE: If you don't provide your own constructor, then a default constructor will be supplied for you. If your class is a base class, the default constructor is empty:
+  //If your class is a derived class, the default constructor calls the parent constructor, passing along any arguments that were provided:
   constructor(fullName, birthYear, course) {
-    // Always needs to happen first!
+    //NOTE: Always needs to happen first! super here is the constructor function of the parent class
+    //NOTE: In derived classes, super() must be called before you
+    // can use 'this'. Leaving this out will cause a reference error.
     super(fullName, birthYear);
     this.course = course;
   }
@@ -447,6 +494,8 @@ martha.calcAge();
 
 ///////////////////////////////////////
 // Inheritance Between "Classes": Object.create
+//NOTE: Object.create way of creating prototype chain
+//NOTE: it's a big technique but less used comparing to ES6 class and constructor function
 
 const PersonProto = {
   calcAge() {
@@ -481,6 +530,7 @@ jay.calcAge();
 // Encapsulation: Protected Properties and Methods
 // Encapsulation: Private Class Fields and Methods
 
+//NOTE: TEST: still in proposal phase, can try in Chrome
 // 1) Public fields
 // 2) Private fields
 // 3) Public methods
@@ -488,10 +538,11 @@ jay.calcAge();
 // (there is also the static version)
 
 class Account {
-  // 1) Public fields (instances)
+  //NOTE: available and same for all instances 1) Public fields (on instances, not on prototype)
   locale = navigator.language;
 
-  // 2) Private fields (instances)
+  //NOTE: 2) Private fields (instances)
+  //NOTE:GOOGLE: the fields (this naming because Java or C use it in class) need to be out of any method
   #movements = [];
   #pin;
 
@@ -500,14 +551,14 @@ class Account {
     this.currency = currency;
     this.#pin = pin;
 
-    // Protected property
+    //NOTE: Protected property, convention to add _ before the property, but we can still access from outside of the class
     // this._movements = [];
     // this.locale = navigator.language;
 
     console.log(`Thanks for opening an account, ${owner}`);
   }
 
-  // 3) Public methods
+  //NOTE: 3) Public methods
 
   // Public interface
   getMovements() {
@@ -537,7 +588,7 @@ class Account {
     console.log('Helper');
   }
 
-  // 4) Private methods
+  // 4)NOTE: Private methods, no browser support this now
   // #approveLoan(val) {
   _approveLoan(val) {
     return true;
@@ -546,6 +597,7 @@ class Account {
 
 const acc1 = new Account('Jonas', 'EUR', 1111);
 
+//NOTE: instead of directly mutate properties(object like), we should use methods 
 // acc1._movements.push(250);
 // acc1._movements.push(-140);
 // acc1.approveLoan(1000);
@@ -561,7 +613,7 @@ Account.helper();
 // console.log(acc1.#pin);
 // console.log(acc1.#approveLoan(100));
 
-// Chaining
+//NOTE: Chaining, need to return this keyword from the chaining method
 acc1.deposit(300).deposit(500).withdraw(35).requestLoan(25000).withdraw(4000);
 console.log(acc1.getMovements());
 */
@@ -644,4 +696,3 @@ rivian
 
 console.log(rivian.speedUS);
 */
-
